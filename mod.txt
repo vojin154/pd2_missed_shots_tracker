@@ -1,10 +1,10 @@
 {
-	"blt_version": 2,
 	"name" : "Missed Shots Tracker",
 	"description" : "Tracks how many shots have you missed during your heist.",
 	"author" : "vojin154",
 	"contact" : "vojin154#1474",
-	"version" : "2",
+	"blt_version": 2,
+	"version" : "2.1",
 	"color" : "1 0 0",
 	"updates": [
 		{
