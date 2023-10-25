@@ -1,0 +1,18 @@
+{
+    "missed_shots_tracker_menu" : "Shots Missed Tracker",
+    "missed_shots_tracker_menu_desc" : "Change your Shots Missed Tracker settings",
+    "missed_shots_tracker_fonts_title" : "FONTS",
+    "missed_shots_tracker_fonts_desc" : "Change the font of Shots Missed Tracker text",
+    "missed_shots_tracker_size_title" : "SIZE",
+    "missed_shots_tracker_size_desc" : "Change the size of Shots Missed Tracker text",
+    "victory_missed_shots" : "Shots Missed:",
+    "fonts/font_small_mf" : "font_small_mf",
+    "fonts/font_eurostile_ext" : "font_eurostile_ext",
+    "fonts/font_large" : "font_large",
+    "fonts/font_medium" : "font_medium",
+    "fonts/font_medium_noshadow" : "font_medium_noshadow",
+    "fonts/font_medium_shadow" : "font_medium_medium",
+    "fonts/font_small" : "font_small",
+    "fonts/font_small_noshadow" : "font_small_noshadow",
+    "fonts/font_small_shadow" : "font_small_shadow"
+}
