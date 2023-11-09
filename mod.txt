@@ -4,7 +4,7 @@
 	"author" : "vojin154",
 	"contact" : "vojin154#1474",
 	"blt_version": 2,
-	"version" : "2.1",
+	"version" : "2.2",
 	"color" : "1 0 0",
 	"updates": [
 		{
