@@ -1,4 +1,9 @@
+local values = MissedShotsTracker.values
+Hooks:PostHook(StatisticsManager, "shot_fired", "shot_fired_missed_shots_tracker", function(self, data)
+    local shots_fired = self._global.session.shots_fired
+    local total = shots_fired.total
+    local hits = shots_fired.hits
 
-Hooks:PostHook(StatisticsManager, "shot_fired", "ShotsMissedTracker", function(self, data)
-    MissedShotsTracker.values.shots_missed_new = self._global.session.shots_fired.total - self._global.session.shots_fired.hits
+    values.shots_missed = total - hits
+    MissedShotsTracker:set_shots(values.shots_missed)
 end)

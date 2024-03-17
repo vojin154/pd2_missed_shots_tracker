@@ -1,3 +1,5 @@
+local settings = MissedShotsTracker.settings
+
 Hooks:Add("MenuManagerBuildCustomMenus", "MenuManagerBuildCustomMenusMissedShotsTracker", function(menu_manager, nodes)
     MissedShotsTracker:Load()
 
@@ -5,48 +7,78 @@ Hooks:Add("MenuManagerBuildCustomMenus", "MenuManagerBuildCustomMenusMissedShots
 
     MenuHelper:NewMenu(main_menu_id)
 
-    MenuCallbackHandler.callback_missed_shots_tracker_y = function(self, item)
-        MissedShotsTracker.settings.y = item:value()
-        if alive(MissedShotsTracker.text) then
-            MissedShotsTracker.text:set_y(MissedShotsTracker.settings.y * MissedShotsTracker.hud.panel:height())
+    function MenuCallbackHandler:callback_missed_shots_tracker_y(item)
+        local text = MissedShotsTracker.text
+        settings.y = item:value()
+        if alive(text) then
+            text:set_y(settings.y * MissedShotsTracker.hud.panel:height())
         end
         MissedShotsTracker:Save()
     end
 
-    MenuCallbackHandler.callback_missed_shots_tracker_x = function(self, item)
-        MissedShotsTracker.settings.x = item:value()
-        if alive(MissedShotsTracker.text) then
-            MissedShotsTracker.text:set_x(MissedShotsTracker.settings.x * MissedShotsTracker.hud.panel:width())
+    function MenuCallbackHandler:callback_missed_shots_tracker_x(item)
+        local text = MissedShotsTracker.text
+        settings.x = item:value()
+        if alive(text) then
+            text:set_x(settings.x * MissedShotsTracker.hud.panel:width())
         end
         MissedShotsTracker:Save()
     end
 
-    MenuCallbackHandler.callback_missed_shots_tracker_font_size = function(self, item)
-        MissedShotsTracker.settings.font_size = item:value()
-        if alive(MissedShotsTracker.text) then
-            MissedShotsTracker.text:set_font_size(MissedShotsTracker.settings.font_size)
+    function MenuCallbackHandler:callback_missed_shots_tracker_font_size(item)
+        local text = MissedShotsTracker.text
+        settings.font_size = item:value()
+        if alive(text) then
+            text:set_font_size(settings.font_size)
         end
         MissedShotsTracker:Save()
     end
 
-    MenuCallbackHandler.callback_missed_shots_tracker_fonts = function(self, item)
-        MissedShotsTracker.settings.chosen_font = MissedShotsTracker.fonts[item:value()]
-        MissedShotsTracker.settings.saved_font = item:value()
-        if alive(MissedShotsTracker.text) then
-            MissedShotsTracker.text:set_font(Idstring(MissedShotsTracker.settings.chosen_font))
+    function MenuCallbackHandler:callback_missed_shots_tracker_fonts(item)
+        local text = MissedShotsTracker.text
+        settings.font = MissedShotsTracker.fonts[item:value()]
+        settings.saved_font = item:value()
+        if alive(text) then
+            text:set_font(Idstring(settings.font))
         end
         MissedShotsTracker:Save()
     end
 
-    MenuCallbackHandler.callback_missed_shots_tracker_reset = function(self, item)
-        
-        MenuHelper:ResetItemsToDefaultValue(item, {["MissedShotsTracker.settings.chosen_font"] = true}, "fonts/font_small_mf")
-        MenuHelper:ResetItemsToDefaultValue(item, {["missed_shots_tracker_font_size"] = true}, 20)
-        MenuHelper:ResetItemsToDefaultValue(item, {["missed_shots_tracker_x"] = true}, 0)
-        MenuHelper:ResetItemsToDefaultValue(item, {["missed_shots_tracker_y"] = true}, 0)
+    function MenuCallbackHandler:callback_missed_shots_tracker_reset(item)
+        settings = deep_clone(MissedShotsTracker.default)
+        local items_table = {
+            ["missed_shots_tracker_fonts"] = settings.saved_font,
+            ["missed_shots_tracker_font_size"] = settings.font_size,
+            ["missed_shots_tracker_x"] = settings.x,
+            ["missed_shots_tracker_y"] = settings.y
+        }
     
-        MissedShotsTracker:Save()
+        local function reset_item(_item)
+            local value = items_table[_item._parameters.name]
+            if value and _item.set_value then
+                _item:set_value(value)
+            end
+        end
     
+        local node_items = item._parameters.gui_node.row_items
+        for _, v in pairs(node_items) do
+            reset_item(v.item)
+        end
+    
+        local text = MissedShotsTracker.text
+        if alive(text) then
+            for i, v in pairs(settings) do
+                if i == "font" then
+                    v = Idstring(v)
+                end
+    
+                local func = text["set_" .. i]
+                if func then
+                    func(text, v)
+                end
+            end
+        end
+        MissedShotsTracker:Save()
     end
 
     MenuHelper:AddMultipleChoice({
@@ -55,7 +87,7 @@ Hooks:Add("MenuManagerBuildCustomMenus", "MenuManagerBuildCustomMenusMissedShots
         desc = "missed_shots_tracker_fonts_desc",
         callback = "callback_missed_shots_tracker_fonts",
         items = MissedShotsTracker.fonts,
-        value = MissedShotsTracker.settings.saved_font,
+        value = settings.saved_font,
         menu_id = main_menu_id,
         priority = 8
     })
@@ -72,7 +104,7 @@ Hooks:Add("MenuManagerBuildCustomMenus", "MenuManagerBuildCustomMenusMissedShots
         title = "missed_shots_tracker_size_title",
         description = "missed_shots_tracker_size_desc",
         callback = "callback_missed_shots_tracker_font_size",
-        value = MissedShotsTracker.settings.font_size,
+        value = settings.font_size,
         min = 0,
         max = 100,
         step = 0.1,
@@ -92,7 +124,7 @@ Hooks:Add("MenuManagerBuildCustomMenus", "MenuManagerBuildCustomMenusMissedShots
         id = "missed_shots_tracker_x",
         title = "X",
         callback = "callback_missed_shots_tracker_x",
-        value = MissedShotsTracker.settings.x,
+        value = settings.x,
         min = 0,
         max = 0.91,
         step = 0.01,
@@ -113,7 +145,7 @@ Hooks:Add("MenuManagerBuildCustomMenus", "MenuManagerBuildCustomMenusMissedShots
         id = "missed_shots_tracker_y",
         title = "Y",
         callback = "callback_missed_shots_tracker_y",
-        value = MissedShotsTracker.settings.y,
+        value = settings.y,
         min = 0,
         max = 0.97,
         step = 0.01,

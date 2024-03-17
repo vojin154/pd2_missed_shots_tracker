@@ -1,8 +1,7 @@
 --This might not be the best way to do this, but still better than before when i overrid it.
 
-Hooks:PostHook(StageEndScreenGui, "init", "missed_shots_tracker_init", function(self, saferect_ws, fullrect_ws, statistics_data)
+Hooks:PostHook(StageEndScreenGui, "init", "init_missed_shots_tracker", function(self, saferect_ws, fullrect_ws, statistics_data)
 	local item = self._items[3] -- PERSONAL STATS
-	item._stats = {}
 	item._main_panel:child(5):clear()
 
 	item:set_stats({
@@ -21,6 +20,7 @@ Hooks:PostHook(StageEndScreenGui, "init", "missed_shots_tracker_init", function(
 	end
 end)
 
-Hooks:PreHook(StageEndScreenGui, "feed_statistics", "MissedShotsTracker", function(self, data)
-   data.missed_shots = MissedShotsTracker.values.shots_missed_new
+local values = MissedShotsTracker.values
+Hooks:PreHook(StageEndScreenGui, "feed_statistics", "feed_statistics_missed_shots_tracker", function(self, data)
+   data.missed_shots = values.shots_missed_new
 end)
