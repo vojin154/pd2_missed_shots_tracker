@@ -22,5 +22,5 @@ end)
 
 local values = MissedShotsTracker.values
 Hooks:PreHook(StageEndScreenGui, "feed_statistics", "feed_statistics_missed_shots_tracker", function(self, data)
-   data.missed_shots = values.shots_missed_new
+   data.missed_shots = values.shots_missed
 end)
